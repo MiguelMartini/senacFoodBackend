@@ -12,11 +12,11 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
+        $users = User::select('name', 'email')->get();;
 
         return response()->json([
             'status' => 'Sucesso',
-            'data' => $users->only(['nome', 'email'])
+            'data' => $users
         ], 200);
     }
 
