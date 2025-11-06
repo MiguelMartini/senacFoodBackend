@@ -14,4 +14,7 @@ Route::post('login', [AuthController::class, 'login']);
 
 Route::group(['middleware' => 'auth:sanctum'], function (){
     Route::get('users', [UserController::class, 'index']);
+    Route::get('users/{id}', [UserController::class, 'show']);
+    Route::delete('users/{id}', [UserController::class, 'destroy']);
+    Route::patch('users/edit/{id}', [UserController::class, 'update']);
 });
