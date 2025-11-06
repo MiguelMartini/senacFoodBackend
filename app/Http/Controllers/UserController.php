@@ -4,15 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        $users = User::select('name', 'email')->get();;
+        $users = User::select('id', 'name', 'email')->get();
 
         return response()->json([
             'status' => 'Sucesso',
@@ -20,44 +19,68 @@ class UserController extends Controller
         ], 200);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
-        //
-    }
+        $user = Auth::user();
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+        if (!$user) {
+            return response()->json([
+                'status' => 'Falha',
+                'message' => 'Usuário não autenticado'
+            ], 401);
+        }
 
-    /**
-     * Update the specified resource in storage.
-     */
+        if ((int)$user->id !== (int) $id) {
+            return response()->json([
+                'status' => 'Sucesso',
+                'message' => 'Sem permissão para esta operação'
+            ], 203);
+        }
+        return response()->json([
+            'status' => 'Sucesso',
+            'message' => $user
+        ], 200);
+    }
     public function update(Request $request, string $id)
     {
-        //
+        $user = Auth::user();
+
+        if ((int)$user->id !== (int) $id) {
+            return response()->json([
+                'status' => 'Falha',
+                'message' => 'Você não está autorizado para realizar esta operação'
+            ], 203);
+        }
+
+        $validated = Validator::make($request->all(), [
+            'name' => 'string|sometimes',
+            'email' => 'string|sometimes',
+            'password' => 'required',
+        ], [
+            'password.required' => 'Senha obrigatória'
+        ]);
+
+        if ($validated->fails()) {
+            return response()->json([
+                'status' => 'Falha',
+                'message' => $validated->errors()
+            ], 403);
+        }
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json([
+                'status' => 'Falha',
+                'message' => 'Usuário não encontrado'
+            ], 404);
+        }
+
+        $user->update($validated->validated());
+
+        return response()->json([
+            'status' => 'Sucesso',
+            'message' => 'Usuário atualizado com sucesso'
+        ], 201);
     }
 
     /**
@@ -65,6 +88,27 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $user = Auth::user();
+
+        if ((int)$user->id !== (int) $id) {
+            return response()->json([
+                'status' => 'Sucesso',
+                'message' => 'Sem permissão para esta operação'
+            ], 203);
+        }
+
+        if (!$user) {
+            return response()->json([
+                'status' => 'Falha',
+                'message' => 'Usuário não encontrado'
+            ], 404);
+        }
+
+        $user->delete();
+
+        return response()->json([
+            'status' => 'Sucesso',
+            'message' => 'Usuário deletado com suceeso'
+        ], 200);
     }
 }
