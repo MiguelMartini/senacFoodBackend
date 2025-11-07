@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('favoritos', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+        Schema::create('ingrediente_receita', function (Blueprint $table) {
             $table->foreignId('receita_id')->constrained('receitas')->onDelete('cascade');
-            $table->timestamps();
+            $table->foreignId('ingrediente_id')->constrained('ingredientes')->onDelete('cascade');
+            $table->string('quantidade')->nullable();
+            $table->primary(['receita_id', 'ingrediente_id']);
         });
     }
 
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('favoritos');
+        Schema::dropIfExists('ingrediente_receita');
     }
 };

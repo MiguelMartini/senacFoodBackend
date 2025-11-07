@@ -13,11 +13,12 @@ return new class extends Migration
     {
         Schema::create('receitas', function (Blueprint $table) {
             $table->id();
-            $table->string('nome', 80);
-            $table->string('descricao', 80);
-            $table->foreignId('users_id');
-            $table->foreignId('favoritos_id');
-            $table->foreignId('categoria_id');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('categoria_id')->nullable()->constrained('categorias')->onDelete('set null');
+            $table->string('titulo');
+            $table->text('descricao')->nullable();
+            $table->text('modo_preparo')->nullable();
+            $table->integer('tempo_preparo')->nullable();
             $table->timestamps();
         });
     }
