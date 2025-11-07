@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('ingredientes', function (Blueprint $table) {
             $table->id();
-            $table->string('nome', 45);
-            $table->string('descricao', 45);
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('nome');
             $table->timestamps();
         });
     }
