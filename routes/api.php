@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\CategoriasController;
 use App\Http\Controllers\ReceitasController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -11,7 +12,7 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::post('register', [AuthController::class, 'register']);
-Route::post('login', [AuthController::class, 'login']);
+Route::post('login', [AuthController::class, 'login'])->name('login');
 
 Route::group(['middleware' => 'auth:sanctum'], function (){
     Route::get('users', [UserController::class, 'index']);
@@ -21,4 +22,10 @@ Route::group(['middleware' => 'auth:sanctum'], function (){
     
     Route::get('receitas', [ReceitasController::class, 'index']);
     Route::post('receitas', [ReceitasController::class, 'store']);
+
+    Route::get('categorias', [CategoriasController::class, 'index']);
+    Route::post('categorias', [CategoriasController::class, 'store']);
+    Route::get('categorias/{id}', [CategoriasController::class, 'show']);
+    Route::patch('categorias/edit/{id}', [CategoriasController::class, 'update']);
+    Route::delete('categorias/{id}', [CategoriasController::class, 'destroy']);
 });
