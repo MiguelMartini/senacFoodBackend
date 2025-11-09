@@ -22,18 +22,21 @@ class Receitas extends Model
 
     public function categoria()
     {
-        return $this->belongsTo(Categorias::class);
+        return $this->belongsTo(Categorias::class, 'categoria_id', 'id');
     }
 
     public function ingredientes()
-    {
-        return $this->belongsToMany(Ingredientes::class)
-                    ->withPivot('quantidade')
-                    ->withTimestamps();
-    }
+{
+    return $this->belongsToMany(
+        Ingredientes::class,   
+        'ingrediente_receita', 
+        'receita_id',  
+        'ingrediente_id'  
+    )->withPivot('quantidade');
+}
 
     public function favoritos()
     {
-        return $this->hasMany(Favoritos::class);
+        return $this->hasMany(Favoritos::class, 'receita_id', 'id');
     }
 }
