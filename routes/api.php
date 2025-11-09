@@ -22,6 +22,9 @@ Route::group(['middleware' => 'auth:sanctum'], function (){
     
     Route::get('receitas', [ReceitasController::class, 'index']);
     Route::post('receitas', [ReceitasController::class, 'store']);
+    Route::get('receitas/{id}', [ReceitasController::class, 'show']);
+    Route::patch('receitas/edit/{id}', [ReceitasController::class, 'update']);
+    Route::delete('receitas/{id}', [ReceitasController::class, 'destroy']);
 
     Route::get('categorias', [CategoriasController::class, 'index']);
     Route::post('categorias', [CategoriasController::class, 'store']);
