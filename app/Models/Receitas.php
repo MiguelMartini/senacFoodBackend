@@ -32,7 +32,8 @@ class Receitas extends Model
         'ingrediente_receita', 
         'receita_id',  
         'ingrediente_id'  
-    )->withPivot('quantidade');
+    )->withPivot('quantidade')
+    ->withTimestamps();
 }
 
     public function favoritos()
