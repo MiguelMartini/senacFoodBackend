@@ -1,5 +1,8 @@
 # 🥗 SENACFOOD
 
+## Sobre
+Este projeto é uma API Back-end desenvolvida em Laravel, cronstruída com o objetivo de cadastro de receitas, ingredientes culinários e integração com modelos agentes de IA. A proposta é oferecer uma plataforma prática e intuitiva que facilite o dia a dia de quem gosta ou precisa cozinhar, permitindo que os usuários cadastrem, consultem e organizem suas receitas de forma simples e eficiente.
+
 ## 1. Instalação e Execução
 ```
 git clone https://github.com/seuRepo/sportfinderbackend
