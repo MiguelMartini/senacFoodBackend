@@ -41,6 +41,8 @@ class ReceitasController extends Controller
                 'modo_preparo' => 'required|string',
                 'tempo_preparo' => 'required|integer|min:1',
                 'categoria_id' => 'required|exists:categorias,id',
+                'ingredientes' => 'sometimes|array',
+                'ingredientes.*.id' => 'required|exists:ingredientes,id',
             ]);
 
             if ($validator->fails()) {
@@ -63,6 +65,11 @@ class ReceitasController extends Controller
             $data['user_id'] = $user->id;
 
             $receita = Receitas::create($data);
+
+            if ($request->has('ingredientes')) {
+                $ingredientesIds = collect($request->ingredientes)->pluck('id')->toArray();
+                $receita->ingredientes()->sync($ingredientesIds);
+            }
 
             return response()->json([
                 'status' => 'Sucesso',
@@ -135,6 +142,8 @@ class ReceitasController extends Controller
             'modo_preparo' => 'sometimes|string',
             'tempo_preparo' => 'sometimes|integer|min:1',
             'categoria_id' => 'sometimes|exists:categorias,id',
+            'ingredientes' => 'sometimes|array',
+            'ingredientes.*' => 'exists:ingredientes,id'
         ]);
 
         if ($validator->fails()) {
@@ -151,6 +160,10 @@ class ReceitasController extends Controller
             'tempo_preparo',
             'categoria_id'
         ]));
+
+         if ($request->has('ingredientes')) {
+            $receita->ingredientes()->sync($request->ingredientes);
+        }
 
         return response()->json([
             'status' => 'Sucesso',

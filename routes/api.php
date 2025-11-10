@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\CategoriasController;
+use App\Http\Controllers\IngredientesController;
 use App\Http\Controllers\ReceitasController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -16,19 +17,25 @@ Route::post('login', [AuthController::class, 'login'])->name('login');
 
 Route::group(['middleware' => 'auth:sanctum'], function (){
     Route::get('users', [UserController::class, 'index']);
-    Route::get('users/{id}', [UserController::class, 'show']);
+    Route::get('user/{id}', [UserController::class, 'show']);
     Route::delete('users/{id}', [UserController::class, 'destroy']);
     Route::patch('users/edit/{id}', [UserController::class, 'update']);
     
     Route::get('receitas', [ReceitasController::class, 'index']);
     Route::post('receitas', [ReceitasController::class, 'store']);
-    Route::get('receitas/{id}', [ReceitasController::class, 'show']);
+    Route::get('receita/{id}', [ReceitasController::class, 'show']);
     Route::patch('receitas/edit/{id}', [ReceitasController::class, 'update']);
     Route::delete('receitas/{id}', [ReceitasController::class, 'destroy']);
 
     Route::get('categorias', [CategoriasController::class, 'index']);
     Route::post('categorias', [CategoriasController::class, 'store']);
-    Route::get('categorias/{id}', [CategoriasController::class, 'show']);
+    Route::get('categoria/{id}', [CategoriasController::class, 'show']);
     Route::patch('categorias/edit/{id}', [CategoriasController::class, 'update']);
     Route::delete('categorias/{id}', [CategoriasController::class, 'destroy']);
+
+    Route::get('ingredientes', [IngredientesController::class, 'index']);
+    Route::post('ingredientes', [IngredientesController::class, 'store']);
+    Route::get('ingrediente/{id}', [IngredientesController::class, 'show']);
+    Route::patch('ingredientes/edit/{id}', [IngredientesController::class, 'update']);
+    Route::delete('ingredientes/{id}', [IngredientesController::class, 'destroy']);
 });
