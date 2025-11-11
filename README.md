@@ -5,8 +5,8 @@ Este projeto é uma API Back-end desenvolvida em Laravel, cronstruída com o obj
 
 ## 1. Instalação e Execução
 ```
-git clone https://github.com/seuRepo/sportfinderbackend
-cd sportFinderBackend
+git clone https://github.com/seuRepositorio/senacFoodBackend.git
+cd senacFoodBackend
 composer install //instalar dependências
 cp .env.example .env
 php artisan key:generate
