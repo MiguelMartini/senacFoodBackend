@@ -21,7 +21,6 @@ class Ingredientes extends Model
     public function receitas()
     {
         return $this->belongsToMany(Receitas::class)
-                    ->withPivot('quantidade')
                     ->withTimestamps();
     }
 }

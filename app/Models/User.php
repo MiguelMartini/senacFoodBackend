@@ -63,6 +63,11 @@ class User extends Authenticatable
 
     public function favoritos()
     {
-        return $this->hasMany(Favoritos::class);
+        return $this->belongsToMany(
+        \App\Models\Receitas::class, 
+        'favoritos',   
+        'user_id', 
+        'receita_id' 
+    )->withTimestamps();
     }
 }

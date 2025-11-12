@@ -32,12 +32,11 @@ class Receitas extends Model
         'ingrediente_receita', 
         'receita_id',  
         'ingrediente_id'  
-    )->withPivot('quantidade')
-    ->withTimestamps();
+    )->withTimestamps();
 }
 
     public function favoritos()
     {
-        return $this->hasMany(Favoritos::class, 'receita_id', 'id');
+        return $this->belongsToMany(User::class, 'favoritos')->withTimestamps();
     }
 }
