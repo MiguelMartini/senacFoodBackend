@@ -40,7 +40,7 @@ class ReceitasController extends Controller
                 'descricao' => 'required|string',
                 'modo_preparo' => 'required|string',
                 'tempo_preparo' => 'required|integer|min:1',
-                'categoria_id' => 'required|exists:categorias,id',
+                'categoria_id' => 'sometimes|exists:categorias,id',
                 'ingredientes' => 'sometimes|array',
                 'ingredientes.*.id' => 'required|exists:ingredientes,id',
             ]);
