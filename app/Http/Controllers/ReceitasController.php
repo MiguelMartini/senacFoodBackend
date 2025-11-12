@@ -16,18 +16,21 @@ class ReceitasController extends Controller
         try{
 
             $user = Auth::user();
-            
-            $receitas = Receitas::with(['categoria', 'ingredientes', 'favoritos'])
+
+            $receitas = Receitas::with(['categoria:id,nome', 'ingredientes:id,nome'])
             ->where('user_id', $user->id)
-            ->get();
-            
+            ->get(['id', 'titulo', 'descricao', 'tempo_preparo', 'categoria_id']);
+
             return response()->json([
                 'status' => 'Sucesso',
-                'user' => $user->name,
+                'user' => $user->only(['name']),
+                'total_receitas'=> count($receitas),
                 'receitas' => $receitas
             ], 200);
+
         }catch(Exception $e){
             return response()->json([
+                'status'=> 'Falha',
                 'error' => $e
             ],500);
         }

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\CategoriasController;
+use App\Http\Controllers\FavoritosController;
 use App\Http\Controllers\IngredientesController;
 use App\Http\Controllers\ReceitasController;
 use App\Http\Controllers\UserController;
@@ -38,6 +39,9 @@ Route::group(['middleware' => 'auth:sanctum'], function (){
     Route::get('ingrediente/{id}', [IngredientesController::class, 'show']);
     Route::patch('ingredientes/edit/{id}', [IngredientesController::class, 'update']);
     Route::delete('ingredientes/{id}', [IngredientesController::class, 'destroy']);
+
+    Route::get('/favoritos', [FavoritosController::class, 'index']);
+    Route::post('/receitas/{receitaId}/favorito', [FavoritosController::class, 'toggle']);
 
     Route::post('logout', [AuthController::class, 'logout']);
 
