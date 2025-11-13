@@ -92,11 +92,11 @@ class ReceitasController extends Controller
     try {
         $user = Auth::user();
 
-        $id = (int) $id; // força ID numérico
+        $id = (int) $id;
 
         $receita = Receitas::where('id', $id)
             ->where('user_id', $user->id)
-            ->with(['categoria', 'ingredientes', 'favoritos'])
+            ->with(['categoria', 'ingredientes'])
             ->firstOrFail();
 
         return response()->json([
