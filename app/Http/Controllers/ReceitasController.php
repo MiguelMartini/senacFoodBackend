@@ -16,10 +16,11 @@ class ReceitasController extends Controller
         try{
 
             $user = Auth::user();
-
+            
             $receitas = Receitas::with(['categoria:id,nome', 'ingredientes:id,nome'])
             ->where('user_id', $user->id)
             ->get(['id', 'titulo', 'descricao', 'tempo_preparo', 'categoria_id']);
+
 
             return response()->json([
                 'status' => 'Sucesso',
@@ -77,7 +78,7 @@ class ReceitasController extends Controller
             return response()->json([
                 'status' => 'Sucesso',
                 'message' => 'Receita criada com sucesso',
-                'receita' => $receita
+                'receita' => $receita->only(['titulo', 'descricao'])
             ], 201);
         } catch (\Exception $e) {
             return response()->json([
@@ -101,7 +102,7 @@ class ReceitasController extends Controller
 
         return response()->json([
             'status' => 'Sucesso',
-            'receita' => $receita
+            'receita' => $receita->only('id', 'categoria_id','categoria', 'titulo', 'descricao', 'modo_preparo','tempo_preparo', 'ingredientes')
         ], 200);
 
     } catch (ModelNotFoundException $e) {
@@ -171,7 +172,7 @@ class ReceitasController extends Controller
         return response()->json([
             'status' => 'Sucesso',
             'message' => 'Receita atualizada com sucesso',
-            'receita' => $receita
+            'receita' => $receita->only(['titulo', 'descricao'])
         ], 200);
     }
 

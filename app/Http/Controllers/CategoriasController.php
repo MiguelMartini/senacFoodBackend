@@ -20,7 +20,7 @@ class CategoriasController extends Controller
                 ], 401);
             }
             
-            $categorias = Categorias::where('user_id', $user->id)->get();
+            $categorias = Categorias::where('user_id', $user->id)->select('id', 'nome')->get();
             
             return response()->json([
             'status' => 'Sucesso',
@@ -51,7 +51,7 @@ class CategoriasController extends Controller
         return response()->json([
             'status' => 'Sucesso',
             'message' => 'Categoria criada com sucesso!',
-            'data' => $categoria
+            'data' => $categoria->only('id','nome')
         ], 201);
     }
      public function show(string $id)
@@ -71,7 +71,7 @@ class CategoriasController extends Controller
 
         return response()->json([
             'status' => 'Sucesso',
-            'data' => $categoria
+            'data' => $categoria->only('id', 'nome')
         ], 200);
     }
 
@@ -108,7 +108,7 @@ class CategoriasController extends Controller
         return response()->json([
             'status' => 'Sucesso',
             'message' => 'Categoria atualizada com sucesso!',
-            'data' => $categoria
+            'data' => $categoria->only('id', 'nome')
         ], 200);
     }
    public function destroy(string $id)
@@ -131,7 +131,7 @@ class CategoriasController extends Controller
         return response()->json([
             'status' => 'Sucesso',
             'message' => 'Categoria excluída com sucesso!',
-            'categoria' => $categoria->nome
+            'categoria' => $categoria->only('nome')
         ], 200);
     }
 }

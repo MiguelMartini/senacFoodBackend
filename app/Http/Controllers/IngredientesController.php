@@ -12,7 +12,7 @@ class IngredientesController extends Controller
     {
         $user = Auth::user();
 
-        $ingredientes = Ingredientes::where('user_id', $user->id)->get();
+        $ingredientes = Ingredientes::where('user_id', $user->id)->select('id', 'nome')->get();
 
         return response()->json([
             'status' => 'Sucesso',
@@ -35,7 +35,7 @@ class IngredientesController extends Controller
         return response()->json([
             'status' => 'Sucesso',
             'message' => 'Ingrediente criado com sucesso!',
-            'data' => $ingrediente
+            'data' => $ingrediente->only(['id','nome'])
         ], 201);
     }
  public function show(string $id)
@@ -55,7 +55,7 @@ class IngredientesController extends Controller
 
         return response()->json([
             'status' => 'Sucesso',
-            'data' => $ingrediente
+            'data' => $ingrediente->only('id', 'nome')
         ], 200);
     }
     public function update(Request $request, string $id)
@@ -82,7 +82,7 @@ class IngredientesController extends Controller
         return response()->json([
             'status' => 'Sucesso',
             'message' => 'Ingrediente atualizado com sucesso!',
-            'data' => $ingrediente
+            'data' => $ingrediente->only('id', 'nome')
         ], 200);
     }
     public function destroy(string $id)
