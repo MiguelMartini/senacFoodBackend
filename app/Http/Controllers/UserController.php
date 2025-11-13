@@ -11,7 +11,7 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::select('id', 'name', 'email')->get();
+        $users = User::select('id', 'name', 'email', 'perfil')->get();
 
         return response()->json([
             'status' => 'Sucesso',
@@ -55,6 +55,7 @@ class UserController extends Controller
         $validated = Validator::make($request->all(), [
             'name' => 'string|sometimes',
             'email' => 'string|sometimes',
+            'perfil' => 'string|sometimes',
             'password' => 'required',
         ], [
             'password.required' => 'Senha obrigatória'
