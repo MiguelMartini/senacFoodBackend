@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\CategoriasController;
 use App\Http\Controllers\FavoritosController;
+use App\Http\Controllers\GroqController;
 use App\Http\Controllers\IngredientesController;
 use App\Http\Controllers\ReceitasController;
 use App\Http\Controllers\UserController;
@@ -42,6 +43,8 @@ Route::group(['middleware' => 'auth:sanctum'], function (){
 
     Route::get('/favoritos', [FavoritosController::class, 'index']);
     Route::post('/receitas/{receitaId}/favorito', [FavoritosController::class, 'toggle']);
+
+    Route::get('insightia', [GroqController::class, 'insightIA']);
 
     Route::post('logout', [AuthController::class, 'logout']);
 });
