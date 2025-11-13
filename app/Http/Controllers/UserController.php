@@ -38,7 +38,7 @@ class UserController extends Controller
         }
         return response()->json([
             'status' => 'Sucesso',
-            'message' => $user
+            'message' => $user->only(['id','name', 'email','perfil'])
         ], 200);
     }
     public function update(Request $request, string $id)
