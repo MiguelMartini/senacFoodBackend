@@ -37,3 +37,14 @@ http://localhost/api/login
 ```
 para acessar a seguinte rota, deve consumir o Token disponibilizado pela rota de login
 http://localhost/api/users
+## 4. Integração com modelos de IA
+- A integração com modelos de IA ocorre com a API do Groq Cloud
+- cadastre-se no site e pegue a chave da API, colocando no .env
+  https://console.groq.com/home 
+  ```
+  //.env
+  GROQ_API_KEY=api_key_aqui
+
+  //terminal
+  composer require lucianotonet/groq-php //para instalar a biblioteca
+  ```
