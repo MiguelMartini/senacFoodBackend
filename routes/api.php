@@ -31,7 +31,7 @@ Route::group(['middleware' => 'auth:sanctum'], function (){
     Route::get('categorias', [CategoriasController::class, 'index']);
     Route::post('categorias', [CategoriasController::class, 'store']);
     Route::get('categoria/{id}', [CategoriasController::class, 'show']);
-    Route::patch('categorias/edit/{id}', [CategoriasController::class, 'update']);
+    Route::patch('categoria/edit/{id}', [CategoriasController::class, 'update']);
     Route::delete('categorias/{id}', [CategoriasController::class, 'destroy']);
 
     Route::get('ingredientes', [IngredientesController::class, 'index']);
@@ -44,5 +44,4 @@ Route::group(['middleware' => 'auth:sanctum'], function (){
     Route::post('/receitas/{receitaId}/favorito', [FavoritosController::class, 'toggle']);
 
     Route::post('logout', [AuthController::class, 'logout']);
-
 });
