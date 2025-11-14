@@ -11,18 +11,12 @@ class GroqController extends Controller
 {
     public function insightPerfil()
     {
+       $groq = new Groq(getenv('GROQ_API_KEY'));
+        
         $user = Auth::user();
         $perfil = $user->perfil;
 
-        $groq = new Groq(getenv('GROQ_API_KEY'));
-
-        try {
-            $response = $groq->chat()->completions()->create([
-                'model' => getenv('GROQ_MODEL'),
-                'messages' => [
-                    [
-                        'role' => 'system',
-                        'content' => ' Você é um Chef Executivo de alta gastronomia especializado em criar refeições equilibradas, saborosas e personalizadas. Seu objetivo é gerar uma saudação ao usuário e dar sugestões de refeições completas que incluam proteínas, carboidratos, legumes e/ou vegetais, com combinações harmoniosas e bem estruturadas.
+        $systemBase = ' Você é um Chef Executivo de alta gastronomia especializado em criar refeições equilibradas, saborosas e personalizadas. Seu objetivo é gerar uma saudação ao usuário e dar sugestões de refeições completas que incluam proteínas, carboidratos, legumes e/ou vegetais, com combinações harmoniosas e bem estruturadas.
                     RETORNE SEMPRE EXCLUSIVAMENTE UM JSON VÁLIDO, seguindo exatamente o formato:
                     {
                     "saudacao": ""    
@@ -49,11 +43,26 @@ class GroqController extends Controller
                     }
 
                     Não use texto fora do JSON.
-                    Apenas o JSON puro.'
+                    Apenas o JSON puro.';
+
+
+        if ($perfil !== null) {
+            $userprompt = 'Baseado no meu perfil ' . $perfil . ' retorne as refeições em JSON.';
+        } else {
+            $userprompt = "Retorne sugestões de refeições completas com ingredientes comuns no dia a dia em JSON.";
+        }
+
+        try {
+            $response = $groq->chat()->completions()->create([
+                'model' => getenv('GROQ_MODEL'),
+                'messages' => [
+                    [
+                        'role' => 'system',
+                        'content' => $systemBase
                     ],
                     [
                         'role' => 'user',
-                        'content' => 'Baseado no meu perfil ' . $perfil . ' retorne as refeições em JSON.'
+                        'content' => $userprompt
                     ],
                 ],
             ]);
@@ -77,11 +86,9 @@ class GroqController extends Controller
                 'jantar'        => $jantar,
             ], 200);
         } catch (\Exception $e) {
-
             if (getenv('APP_DEBUG')) {
                 return response()->json(['error' => $e->getMessage()], 500);
             }
-
             return response()->json(['error' => 'IA indisponível'], 500);
         }
     }
@@ -89,7 +96,7 @@ class GroqController extends Controller
     public function insightIngredientes()
     {
         $groq = new Groq(getenv('GROQ_API_KEY'));
-        
+
         $user = Auth::user();
         $ingredientes = Ingredientes::where('user_id', $user->id)->get();
 
