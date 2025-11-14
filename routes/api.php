@@ -45,7 +45,7 @@ Route::group(['middleware' => 'auth:sanctum'], function (){
     Route::post('/receitas/{receitaId}/favorito', [FavoritosController::class, 'toggle']);
 
     Route::get('insight', [GroqController::class, 'insightPerfil']);
-    // Route::get('ingredientes/insight', [GroqController::class, 'insightIngredientes']);
+    Route::get('ingredientes/insight', [GroqController::class, 'insightIngredientes']);
     // Route::get('receitas/insight', [GroqController::class, 'insightReceitas']);
 
     Route::post('logout', [AuthController::class, 'logout']);
