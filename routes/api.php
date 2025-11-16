@@ -18,7 +18,6 @@ Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login'])->name('login');
 
 Route::group(['middleware' => 'auth:sanctum'], function (){
-    Route::get('users', [UserController::class, 'index']);
     Route::get('user/{id}', [UserController::class, 'show']);
     Route::delete('users/{id}', [UserController::class, 'destroy']);
     Route::patch('users/edit/{id}', [UserController::class, 'update']);

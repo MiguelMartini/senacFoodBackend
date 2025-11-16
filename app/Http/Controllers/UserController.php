@@ -9,16 +9,6 @@ use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
-    public function index()
-    {
-        $users = User::select('id', 'name', 'email', 'perfil')->get();
-
-        return response()->json([
-            'status' => 'Sucesso',
-            'data' => $users
-        ], 200);
-    }
-
     public function show(string $id)
     {
         $user = Auth::user();
