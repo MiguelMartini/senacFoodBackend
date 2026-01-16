@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Middleware\ForceJsonResponse;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -8,7 +7,6 @@ use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Http\Middleware\HandleCors;
 use Laravel\Sanctum\Exceptions\MissingAbilityException;
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -18,9 +16,16 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        $middleware->prepend(HandleCors::class);
-        $middleware->append(ForceJsonResponse::class);
-    })
+    $middleware->statefulApi();
+
+    // 3. Garanta que o CORS e Cookies funcionem em localhost:
+    $middleware->alias([
+        'api' => [
+            \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+            \Illuminate\Routing\Middleware\SubstituteBindings::class,
+        ],
+    ]);
+})
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->render(function (AuthenticationException $e, $request) {
                 return response()->json([

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
@@ -28,35 +29,36 @@ class UserController extends Controller
         }
         return response()->json([
             'status' => 'Sucesso',
-            'message' => $user->only(['id','name', 'email','perfil'])
+            'message' => $user->only(['id', 'name', 'email', 'perfil'])
         ], 200);
     }
     public function update(Request $request, string $id)
     {
-        $user = Auth::user();
+        $authUser = Auth::user();
 
-        if ((int)$user->id !== (int) $id) {
+        if ((int) $authUser->id !== (int) $id) {
             return response()->json([
                 'status' => 'Falha',
                 'message' => 'Você não está autorizado para realizar esta operação'
-            ], 203);
+            ], 403);
         }
 
-        $validated = Validator::make($request->all(), [
-            'name' => 'string|sometimes',
-            'email' => 'string|sometimes',
-            'perfil' => 'string|sometimes',
+        $validator = Validator::make($request->all(), [
+            'name' => 'sometimes|string',
+            'email' => 'sometimes|string|email',
+            'perfil' => 'sometimes|string',
             'password' => 'required',
         ], [
             'password.required' => 'Senha obrigatória'
         ]);
 
-        if ($validated->fails()) {
+        if ($validator->fails()) {
             return response()->json([
                 'status' => 'Falha',
-                'message' => $validated->errors()
-            ], 403);
+                'message' => $validator->errors()
+            ], 422);
         }
+
         $user = User::find($id);
 
         if (!$user) {
@@ -66,12 +68,21 @@ class UserController extends Controller
             ], 404);
         }
 
-        $user->update($validated->validated());
+        if (!Hash::check($request->password, $user->password)) {
+            return response()->json([
+                'status' => 'Falha',
+                'message' => 'Senha inválida'
+            ], 401);
+        }
+
+        $data = collect($validator->validated())->except('password')->toArray();
+
+        $user->update($data);
 
         return response()->json([
             'status' => 'Sucesso',
             'message' => 'Usuário atualizado com sucesso'
-        ], 201);
+        ], 200);
     }
 
     /**
