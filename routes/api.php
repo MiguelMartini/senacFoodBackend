@@ -14,8 +14,16 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
+Route::middleware('auth:sanctum')->get('/me', function (Request $request) {
+    return $request->user();
+});
+
 Route::post('register', [AuthController::class, 'register']);
-Route::post('login', [AuthController::class, 'login'])->name('login');
+Route::post('/login', [AuthController::class, 'login']);
+
+Route::middleware('auth:sanctum')->get('/me', function (Request $request) {
+    return $request->user();
+});
 
 Route::group(['middleware' => 'auth:sanctum'], function (){
     Route::get('user/{id}', [UserController::class, 'show']);
@@ -47,5 +55,7 @@ Route::group(['middleware' => 'auth:sanctum'], function (){
     Route::get('ingredientes/insight', [GroqController::class, 'insightIngredientes']);
     Route::get('receitas/insight', [GroqController::class, 'insightReceitas']);
 
-    Route::post('logout', [AuthController::class, 'logout']);
+    Route::group(['middleware' => 'auth:sanctum'], function (){
+        Route::post('logout', [AuthController::class, 'logout']);
+    });
 });
